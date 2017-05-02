@@ -3,27 +3,25 @@
 
 nameImplementation=0
 
-if [ ! -f "lista.csv" ]
-then
+if [ ! -f "lista.csv" ]; then
     nameImplementation=1
+
     echo "Arquivo lista.csv nao foi encontrada, usando numeros aleatorios..."
 
-    if [ "x$1" == "x" ]
-    then
+    if [ "x$1" == "x" ]; then
         echo "Passe o total de participantes"
         exit 1
     fi
 fi
 
 
-if [ ${nameImplementation} -eq 1 ]
-then
+if [ ${nameImplementation} -eq 1 ]; then
     declare number="${1}"
 else
-    declare number="$(cat lista.csv | wc -l | sed 's| ||g')"
+    declare number="$(wc -l | sed 's| ||g' < lista.csv)"
 fi
 
-declare today=$(date +%Y-%m-%d)
+declare today="$(date +%Y-%m-%d)"
 
 function getNameFromCsv() {
     personNumber="${1}"
@@ -44,8 +42,7 @@ function getNextNumber() {
 function getResponse() {
     nextNumber="${1}"
 
-    if [ ${nameImplementation} -eq 0 ]
-    then
+    if [ ${nameImplementation} -eq 0 ]; then
         echo "Pessoa sorteada: $(getNameFromCsv ${nextNumber})"
     else
         echo "Numero sorteado: ${nextNumber}"
@@ -55,49 +52,44 @@ function getResponse() {
 function numberAlreadyExists() {
     nextNumber="${1}"
 
-    if [ ! -f ${today}.log ]
-    then
-        echo "$(getResponse ${nextNumber})" | tee -a ${today}.log
+    if [ ! -f "${today}.log" ]; then
+        echo "$(getResponse ${nextNumber})" | tee -a "${today}.log"
         exit 1
     fi
-    
-    if [ ${nameImplementation} -eq 0 ]
-    then
-        cat ${today}.log | grep -w "$(getNameFromCsv ${nextNumber})" >/dev/null && exists=0 || exists=1
+
+    if [ ${nameImplementation} -eq 0 ]; then
+        cat "${today}.log" | grep -w "$(getNameFromCsv ${nextNumber})" >/dev/null && exists=0 || exists=1
     else
-        cat ${today}.log | grep -w "${nextNumber}" >/dev/null && exists=0 || exists=1
+        cat "${today}.log" | grep -w "${nextNumber}" >/dev/null && exists=0 || exists=1
     fi
 }
 
-firstNumber=$(getNextNumber)
+firstNumber="$(getNextNumber)"
 
 numberAlreadyExists ${firstNumber}
 
-if [ ${exists} -eq 0 ]
-then
+if [ ${exists} -eq 0 ]; then
     starting=1
     totalCount=0
 
-    while [ ${starting} -eq 1 -a ${totalCount} -le ${number} ]
+    while [ "${starting}" -eq 1 -a "${totalCount}" -le "${number}" ]
     do
-        if [ ${totalCount} -eq ${number} ]
-        then
+        if [ "${totalCount}" -eq "${number}" ]; then
             echo "Todos as pessoas foram sorteados, saindo.."
             starting=0
         fi
 
-        newNumber=$(getNextNumber)
+        newNumber="$(getNextNumber)"
 
-        numberAlreadyExists ${newNumber}
-    
-        if [ ${exists} -eq 1 ]
-        then
-            echo "$(getResponse ${newNumber})" | tee -a ${today}.log
+        numberAlreadyExists "${newNumber}"
+
+        if [ "${exists}" -eq 1 ]; then
+            echo "$(getResponse ${newNumber})" | tee -a "${today}.log"
             starting=0
         fi
 
         totalCount=$((totalCount+1))
     done
-else 
-    echo "$(getResponse ${firstNumber})" | tee -a ${today}.log
+else
+    echo "$(getResponse ${firstNumber})" | tee -a "${today}.log"
 fi
