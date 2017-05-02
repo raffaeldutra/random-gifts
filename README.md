@@ -1,6 +1,18 @@
 # Simples script para sorteio de brindes
 
-Pra rodar apena é necessário passar a quantidade de participantes no evento, por exemplo:
+### Em caso de houver um arquivo chamado lista.csv
+
+Caso existir uma lista.csv no mesmo diretorio, será feito o sorteio baseado em número aleatório extraindo o nome do participante da lista.
+
+```shell
+./gift.sh
+```
+
+Script funcionará até atender todos os números da lista
+
+### Em caso de não haver um arquivo lista.csv 
+
+Pra rodar apenas é necessário passar a quantidade de participantes no evento, por exemplo:
 
 ```shell
 ./gift.sh 20
