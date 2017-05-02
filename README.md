@@ -22,4 +22,4 @@ Caso o número já tenha sido sorteado, ele irá para um próximo aleatório at�
 
 Esperamos que com isso, tenhamos um bom ganho de tempo :-)
 
-!(https://travis-ci.org/raffaeldutra/random-gifts.svg?branch=master)
+[![Travis](https://travis-ci.org/raffaeldutra/random-gifts.svg?branch=master)
