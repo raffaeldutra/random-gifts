@@ -3,7 +3,7 @@
 
 nameImplementation=0
 
-if [ ! -f "lista.csv" ]; then
+if [ ! -f "lista.csv" 2>/dev/null ]; then
     nameImplementation=1
 
     echo "Arquivo lista.csv nao foi encontrada, usando numeros aleatorios..."
@@ -23,7 +23,7 @@ fi
 
 declare today="$(date +%Y-%m-%d)"
 
-function getNameFromCsv() {
+function getNameFromCsv {
     personNumber="${1}"
 
     #Caso tenha uma lista de nomes apenas, comentar linha abaixo
@@ -35,11 +35,11 @@ function getNameFromCsv() {
     echo "$(cat lista.csv 2>/dev/null | sed "${personNumber}!d")"
 }
 
-function getNextNumber() {
+function getNextNumber {
     echo $(((RANDOM % ${number})  + 1))
 }
 
-function getResponse() {
+function getResponse {
     nextNumber="${1}"
 
     if [ ${nameImplementation} -eq 0 ]; then
@@ -49,7 +49,7 @@ function getResponse() {
     fi
 }
 
-function numberAlreadyExists() {
+function numberAlreadyExists {
     nextNumber="${1}"
 
     if [ ! -f "${today}.log" ]; then
@@ -58,9 +58,17 @@ function numberAlreadyExists() {
     fi
 
     if [ ${nameImplementation} -eq 0 ]; then
-        cat "${today}.log" | grep -w "$(getNameFromCsv ${nextNumber})" >/dev/null && exists=0 || exists=1
+        if [ $(cat "${today}.log" | grep -w "$(getNameFromCsv ${nextNumber})" >/dev/null) ]; then
+            exists=0
+        else
+            exists=1
+        fi
     else
-        cat "${today}.log" | grep -w "${nextNumber}" >/dev/null && exists=0 || exists=1
+        if [ $(cat "${today}.log" | grep -w "${nextNumber}" >/dev/null) ]; then
+            exists=0
+        else
+            exists=1
+        fi
     fi
 }
 
@@ -72,8 +80,7 @@ if [ ${exists} -eq 0 ]; then
     starting=1
     totalCount=0
 
-    while [ "${starting}" -eq 1 -a "${totalCount}" -le "${number}" ]
-    do
+    while [ "${starting}" -eq 1 -a "${totalCount}" -le "${number}" ]; do
         if [ "${totalCount}" -eq "${number}" ]; then
             echo "Todos as pessoas foram sorteados, saindo.."
             starting=0
