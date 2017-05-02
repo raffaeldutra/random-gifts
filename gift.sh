@@ -3,7 +3,7 @@
 
 nameImplementation=0
 
-if [ ! -f "lista.csv" 2>/dev/null ]; then
+if [ ! -f "lista.csv" ]; then
     nameImplementation=1
 
     echo "Arquivo lista.csv nao foi encontrada, usando numeros aleatorios..."
