@@ -21,10 +21,10 @@ function getNameFromCsv() {
     #Caso tenha uma lista de nomes apenas, comentar linha abaixo
     #Caso tenha uma planilha com mais colunas, atentar para o campo do parametro do comando cut
     #pois ali que sera determinado qual coluna deve ser filtrado
-    echo "$(cat lista.csv | grep -i "participante" | cut -d , -f3 | sed "${personNumber}!d")"
+    #echo "$(cat lista.csv | grep -i "participante" | cut -d , -f3 | sed "${personNumber}!d")"
 
     #Caso tenha apenas um input de nomes, comentar linha acima e descomentar esta abaixo
-    #echo "$(cat lista.csv | sed "${personNumber}!d")"
+    echo "$(cat lista.csv | sed "${personNumber}!d")"
 }
 
 function getNextNumber() {
