@@ -32,7 +32,7 @@ function getNameFromCsv {
     #echo "$(cat lista.csv | grep -i "participante" | cut -d , -f3 | sed "${personNumber}!d")"
 
     #Caso tenha apenas um input de nomes, comentar linha acima e descomentar esta abaixo
-    echo "$(cat lista.csv 2>/dev/null | sed "${personNumber}!d")"
+    echo "$(sed "${personNumber}!d" < lista.csv 2>/dev/null)"
 }
 
 function getNextNumber {
