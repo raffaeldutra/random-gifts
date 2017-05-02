@@ -7,8 +7,25 @@ then
     exit 1
 fi
 
+if [ ! -f "lista.csv" ]
+then
+    echo "Arquivo lista.csv nao foi encontrada, saindo..."
+fi
+
 declare number="$1"
 declare today=$(date +%Y-%m-%d)
+
+function getNameFromCsv() {
+    personNumber="${1}"
+
+    #Caso tenha uma lista de nomes apenas, comentar linha abaixo
+    #Caso tenha uma planilha com mais colunas, atentar para o campo do parametro do comando cut
+    #pois ali que sera determinado qual coluna deve ser filtrado
+    echo "$(cat lista.csv | grep -i "participante" | cut -d , -f3 | sed "${personNumber}!d")"
+
+    #Caso tenha apenas um input de nomes, comentar linha acima e descomentar esta abaixo
+    #echo "$(cat lista.csv | sed "${personNumber}!d")"
+}
 
 function getNextNumber() {
     echo $(((RANDOM % ${number})  + 1))
@@ -19,16 +36,16 @@ function numberAlreadyExists() {
 
     if [ ! -f ${today}.log ]
     then
-        echo "Numero sorteado: ${nextNumber}" | tee -a ${today}.log
+        echo "Pessoa sorteada: $(getNameFromCsv ${nextNumber})" | tee -a ${today}.log
         exit 1
     fi
 
-    cat ${today}.log | grep -w ${nextNumber} >/dev/null && exists=0 || exists=1
+    cat ${today}.log | grep -w "$(getNameFromCsv ${nextNumber})" >/dev/null && exists=0 || exists=1
 }
 
-firstNumber=$(getNextNumber)
+firstPerson=$(getNextNumber)
 
-numberAlreadyExists ${firstNumber}
+numberAlreadyExists ${firstPerson}
 
 if [ ${exists} -eq 0 ]
 then
@@ -49,12 +66,12 @@ then
     
         if [ ${exists} -eq 1 ]
         then
-            echo "Numero sorteado: ${newNumber}" | tee -a ${today}.log
+            echo "Pessoa sorteada: $(getNameFromCsv ${newNumber})" | tee -a ${today}.log
             starting=0
         fi
 
         totalCount=$((totalCount+1))
     done
 else 
-    echo "Numero sorteado: ${firstNumber}" | tee -a ${today}.log
+    echo "Pessoa sorteada: $(getNameFromCsv ${firstPerson})" | tee -a ${today}.log
 fi
