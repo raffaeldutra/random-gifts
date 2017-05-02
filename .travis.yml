@@ -9,5 +9,5 @@ before_install:
         - sudo pip install bashate
 
 script:
-    - shellcheck gitf.sh 5
-    - bashate gitf.sh 5
+    - shellcheck gift.sh 5
+    - bashate gift.sh 5
