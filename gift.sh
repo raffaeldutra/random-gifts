@@ -18,7 +18,7 @@ fi
 if [ ${nameImplementation} -eq 1 ]; then
     declare number="${1}"
 else
-    declare number="$(wc -l | sed 's| ||g' < lista.csv)"
+    declare number="$(wc -l < lista.csv | sed 's| ||g')"
 fi
 
 declare today="$(date +%Y-%m-%d)"
@@ -32,7 +32,7 @@ function getNameFromCsv {
     #echo "$(cat lista.csv | grep -i "participante" | cut -d , -f3 | sed "${personNumber}!d")"
 
     #Caso tenha apenas um input de nomes, comentar linha acima e descomentar esta abaixo
-    echo "$(sed "${personNumber}!d" < lista.csv 2>/dev/null)"
+    echo $(sed "${personNumber}!d" < lista.csv)
 }
 
 function getNextNumber {
@@ -58,13 +58,15 @@ function numberAlreadyExists {
     fi
 
     if [ ${nameImplementation} -eq 0 ]; then
-        if [ $(cat "${today}.log" | grep -w "$(getNameFromCsv ${nextNumber})" >/dev/null) ]; then
+        cat "${today}.log" | grep -w "$(getNameFromCsv ${nextNumber})" >/dev/null
+        if [ "$?" -eq 0 ]; then
             exists=0
         else
             exists=1
         fi
     else
-        if [ $(cat "${today}.log" | grep -w "${nextNumber}" >/dev/null) ]; then
+        cat "${today}.log" | grep -w "${nextNumber}" >/dev/null
+        if [ "$?" -eq 0 ]; then
             exists=0
         else
             exists=1
