@@ -3,4 +3,4 @@ dist: trusty
 language: bash
 
 script:
-    - for i in $(seq 5); do ./gift.sh $i; done
+    - for i in $(seq 5); do ./gift.sh 5; done
