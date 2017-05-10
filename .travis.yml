@@ -2,5 +2,9 @@ sudo: required
 dist: trusty
 language: bash
 
+before_install:
+    - docker pull debian
+    - docker run -it --rm --name random-gifts -v $(pwd):/data debian bash /data/gift.sh 10
+
 script:
     - for i in $(seq 5); do ./gift.sh 5; done
