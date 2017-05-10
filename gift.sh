@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 #Rafael Dutra <raffaeldutra@gmail.com>
 
+declare fileName="lista.txt"
 nameImplementation=0
 
-if [ ! -f "lista.csv" ]; then
+if [ ! -f "${fileName}" ]; then
     nameImplementation=1
 
-    echo "Arquivo lista.csv nao foi encontrada, usando numeros aleatorios..."
+    echo "Arquivo ${fileName} nao foi encontrada, usando numeros aleatorios..."
 
     if [ "x$1" == "x" ]; then
         echo "Passe o total de participantes"
@@ -18,7 +19,7 @@ fi
 if [ ${nameImplementation} -eq 1 ]; then
     declare number="${1}"
 else
-    declare number="$(wc -l < lista.csv | sed 's| ||g')"
+    declare number="$(wc -l < ${fileName} | sed 's| ||g')"
 fi
 
 declare today="$(date +%Y-%m-%d)"
@@ -29,10 +30,10 @@ function getNameFromCsv {
     #Caso tenha uma lista de nomes apenas, comentar linha abaixo
     #Caso tenha uma planilha com mais colunas, atentar para o campo do parametro do comando cut
     #pois ali que sera determinado qual coluna deve ser filtrado
-    #echo "$(cat lista.csv | grep -i "participante" | cut -d , -f3 | sed "${personNumber}!d")"
+    #echo "$(cat ${fileName} | grep -i "participante" | cut -d , -f3 | sed "${personNumber}!d")"
 
     #Caso tenha apenas um input de nomes, comentar linha acima e descomentar esta abaixo
-    echo $(sed "${personNumber}!d" < lista.csv)
+    echo $(sed "${personNumber}!d" < ${fileName})
 }
 
 function getNextNumber {
